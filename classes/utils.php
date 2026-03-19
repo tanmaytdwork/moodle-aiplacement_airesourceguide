@@ -50,7 +50,7 @@ class utils {
         $content = self::get_page_content($cmid);
 
         if (empty(trim($content))) {
-            throw new \moodle_exception('emptypage', 'aiplacement_airesourceguide');
+            return [];
         }
         $cached = self::get_cached_references($cmid);
         if ($cached !== null) {
@@ -71,7 +71,7 @@ class utils {
 
         list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'page');
         $page = $DB->get_record('page', ['id' => $cm->instance], '*', MUST_EXIST);
-        return html_to_text($page->content);
+        return trim(strip_tags($page->content));
     }
 
     private static function extract_concepts(string $content, int $cmid): array {
@@ -105,7 +105,7 @@ class utils {
         $generatedtext = $responsedata['generatedcontent'] ?? '';
 
         if (empty($generatedtext)) {
-            throw new \moodle_exception('emptyairesponse', 'aiplacement_airesourceguide');
+            return [];
         }
 
         return self::parse_response($generatedtext);
@@ -178,7 +178,7 @@ class utils {
         }
 
         if (empty($concepts)) {
-            throw new \moodle_exception('noconceptsfound', 'aiplacement_airesourceguide');
+            return [];
         }
 
         return $concepts;
