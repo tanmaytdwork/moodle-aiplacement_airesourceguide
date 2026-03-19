@@ -56,11 +56,22 @@ define([
      * Render the "Find References" button after the page content.
      */
     function renderButton() {
-        // Find the page content area.
-        var contentArea = document.querySelector('#region-main [role="main"]');
-        if (!contentArea) {
-            contentArea = document.querySelector('#region-main .content');
+        // Find the page content area, trying selectors in order of specificity.
+        var selectors = [
+            '#region-main [role="main"]',
+            '#region-main .content',
+            '[role="main"]',
+            '#region-main',
+        ];
+
+        var contentArea = null;
+        for (var i = 0; i < selectors.length; i++) {
+            contentArea = document.querySelector(selectors[i]);
+            if (contentArea) {
+                break;
+            }
         }
+
         if (!contentArea) {
             return;
         }
