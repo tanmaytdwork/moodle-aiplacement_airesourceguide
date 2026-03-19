@@ -29,8 +29,23 @@ namespace aiplacement_airesourceguide;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Event observer for invalidating cached references on Page activity updates.
+ *
+ * @package    aiplacement_airesourceguide
+ * @copyright  2026 Tanmay Deshmukh
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class observer {
 
+    /**
+     * Invalidate cached references when a Page activity is updated.
+     *
+     * Only acts on Page modules; ignores all other module types.
+     *
+     * @param \core\event\course_module_updated $event The event instance.
+     * @return void
+     */
     public static function course_module_updated(\core\event\course_module_updated $event): void {
         $data = $event->get_data();
         $other = $data['other'];

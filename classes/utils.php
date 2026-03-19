@@ -29,6 +29,13 @@ namespace aiplacement_airesourceguide;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Utility methods for retrieving, caching, and building AI-generated references.
+ *
+ * @package    aiplacement_airesourceguide
+ * @copyright  2026 Tanmay Deshmukh
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class utils {
 
     private const SOURCE_TYPES = [
@@ -64,6 +71,14 @@ class utils {
         ],
     ];
 
+    /**
+     * Get AI-generated references for a Page activity.
+     *
+     * Returns cached results if available, otherwise calls the AI subsystem.
+     *
+     * @param int $cmid Course module ID.
+     * @return array Array of reference concepts with sources.
+     */
     public static function get_references(int $cmid): array {
         global $USER;
 
@@ -86,6 +101,12 @@ class utils {
         return $references;
     }
 
+    /**
+     * Retrieve the plain text content of a Page activity.
+     *
+     * @param int $cmid Course module ID.
+     * @return string Plain text content with HTML stripped.
+     */
     private static function get_page_content(int $cmid): string {
         global $DB;
 
@@ -94,6 +115,13 @@ class utils {
         return trim(strip_tags($page->content));
     }
 
+    /**
+     * Call the AI subsystem to extract key concepts from page content.
+     *
+     * @param string $content Plain text page content.
+     * @param int $cmid Course module ID used for context.
+     * @return array Array of parsed concept data.
+     */
     private static function extract_concepts(string $content, int $cmid): array {
         global $USER;
 
@@ -131,6 +159,14 @@ class utils {
         return self::parse_response($generatedtext);
     }
 
+    /**
+     * Build the AI prompt from page content.
+     *
+     * Truncates content to the configured max length before sending.
+     *
+     * @param string $content Plain text page content.
+     * @return string The prompt string to send to the AI.
+     */
     private static function build_prompt(string $content): string {
         $maxlength = (int) get_config('aiplacement_airesourceguide', 'max_content_length') ?: 4000;
         if (strlen($content) > $maxlength) {
@@ -163,6 +199,12 @@ class utils {
                "Content:\n" . $content;
     }
 
+    /**
+     * Parse the AI JSON response into a structured concepts array.
+     *
+     * @param string $responsetext Raw text response from the AI.
+     * @return array Array of cleaned concept data.
+     */
     private static function parse_response(string $responsetext): array {
         $responsetext = trim($responsetext);
         $responsetext = preg_replace('/^```(?:json)?\s*/i', '', $responsetext);
@@ -204,6 +246,12 @@ class utils {
         return $concepts;
     }
 
+    /**
+     * Build the final references array from concepts using enabled sources.
+     *
+     * @param array $concepts Array of concept data from parse_response().
+     * @return array Array of references ready for template rendering.
+     */
     private static function build_references(array $concepts): array {
         $enabledsources = self::get_enabled_sources();
 
@@ -235,6 +283,11 @@ class utils {
         return $references;
     }
 
+    /**
+     * Get the list of source types enabled in admin settings.
+     *
+     * @return array Array of enabled source type keys.
+     */
     private static function get_enabled_sources(): array {
         $config = get_config('aiplacement_airesourceguide', 'enabled_sources');
 
@@ -245,12 +298,25 @@ class utils {
         return explode(',', $config);
     }
 
+    /**
+     * Retrieve cached references for a course module.
+     *
+     * @param int $cmid Course module ID.
+     * @return array|null Cached references or null if not cached.
+     */
     private static function get_cached_references(int $cmid): ?array {
         $cache = \cache::make('aiplacement_airesourceguide', 'references');
         $data = $cache->get($cmid);
         return is_array($data) ? $data : null;
     }
 
+    /**
+     * Store references in the application cache.
+     *
+     * @param int $cmid Course module ID.
+     * @param array $references References to cache.
+     * @return void
+     */
     private static function cache_references(int $cmid, array $references): void {
         $cache = \cache::make('aiplacement_airesourceguide', 'references');
         $cache->set($cmid, $references);

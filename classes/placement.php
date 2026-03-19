@@ -28,6 +28,13 @@ namespace aiplacement_airesourceguide;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Declares the AI actions supported by this placement plugin.
+ *
+ * @package    aiplacement_airesourceguide
+ * @copyright  2026 Tanmay Deshmukh
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class placement extends \core_ai\placement {
 
     public function get_action_list(): array {
