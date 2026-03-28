@@ -1,3 +1,41 @@
+{{!
+    @template aiplacement_airesourceguide/results
+
+    Renders AI-generated reference concepts inside the drawer.
+
+    Context variables required for this template:
+    * hasresults - boolean, whether any concepts were returned.
+    * concepts - array of concept objects, each with:
+        * topic - string, concept name.
+        * description - string, brief explanation.
+        * sources - array of source objects, each with:
+            * label - string, source type label.
+            * icon - string, Font Awesome icon name.
+            * url - string, search URL.
+
+    Example context (json):
+    {
+        "hasresults": true,
+        "concepts": [
+            {
+                "topic": "Machine Learning",
+                "description": "A subset of AI that enables systems to learn from data.",
+                "sources": [
+                    {
+                        "label": "Academic Resources (Google Scholar)",
+                        "icon": "graduation-cap",
+                        "url": "https://scholar.google.com/scholar?q=machine+learning"
+                    },
+                    {
+                        "label": "Video Tutorials (YouTube)",
+                        "icon": "video",
+                        "url": "https://www.youtube.com/results?search_query=machine+learning"
+                    }
+                ]
+            }
+        ]
+    }
+}}
 {{#hasresults}}
     {{#concepts}}
     <div class="card mb-3 airesguide-concept-card">
