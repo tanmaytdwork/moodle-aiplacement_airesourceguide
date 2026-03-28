@@ -27,8 +27,6 @@
 
 namespace aiplacement_airesourceguide;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Hook listener that injects the AI Resource Guide into Page activity views.
  *
@@ -37,8 +35,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class hook_listener {
-
-
     /**
      * Inject the AI Resource Guide AMD module into the page footer.
      *

@@ -27,8 +27,6 @@
 
 namespace aiplacement_airesourceguide\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use core_external\external_api;
 use core_external\external_function_parameters;
 use core_external\external_value;
@@ -40,7 +38,6 @@ use aiplacement_airesourceguide\utils;
  * Web service to get AI-generated references for a Page activity.
  */
 class get_references extends external_api {
-
     /**
      * Define the parameters accepted by this web service.
      *
@@ -72,7 +69,7 @@ class get_references extends external_api {
         ]);
 
         // Step 2: Verify it's a Page activity and get course data.
-        list($course, $cm) = get_course_and_cm_from_cmid($params['cmid'], 'page');
+        [$course, $cm] = get_course_and_cm_from_cmid($params['cmid'], 'page');
 
         // Step 3: Validate context.
         $context = \context_module::instance($cm->id);

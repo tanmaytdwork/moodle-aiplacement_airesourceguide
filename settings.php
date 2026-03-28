@@ -27,7 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 use core_ai\admin\admin_settingspage_provider;
 
 if ($hassiteconfig) {
-
     $settings = new admin_settingspage_provider(
         'aiplacement_airesourceguide',
         new lang_string('pluginname', 'aiplacement_airesourceguide'),

@@ -27,8 +27,6 @@
 
 namespace aiplacement_airesourceguide;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Event observer for invalidating cached references on Page activity updates.
  *
@@ -37,7 +35,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class observer {
-
     /**
      * Invalidate cached references when a Page activity is updated.
      *

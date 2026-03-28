@@ -32,7 +32,6 @@ namespace aiplacement_airesourceguide\privacy;
  * AI-generated reference links for page content, not user-specific data.
  */
 class provider implements \core_privacy\local\metadata\null_provider {
-
     /**
      * Returns the reason this plugin stores no personal data.
      *

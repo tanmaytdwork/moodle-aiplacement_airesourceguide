@@ -26,8 +26,6 @@
 
 namespace aiplacement_airesourceguide;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Declares the AI actions supported by this placement plugin.
  *
@@ -36,7 +34,11 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class placement extends \core_ai\placement {
-
+    /**
+     * Returns the list of AI actions supported by this placement.
+     *
+     * @return array Array of action class names.
+     */
     public function get_action_list(): array {
         return [
             \core_ai\aiactions\generate_text::class,

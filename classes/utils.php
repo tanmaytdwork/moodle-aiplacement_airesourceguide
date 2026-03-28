@@ -27,8 +27,6 @@
 
 namespace aiplacement_airesourceguide;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Utility methods for retrieving, caching, and building AI-generated references.
  *
@@ -37,7 +35,9 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class utils {
-
+    /**
+     * Mapping of source type keys to their label, icon, and URL template.
+     */
     private const SOURCE_TYPES = [
         'academic' => [
             'label' => 'source_academic',
@@ -108,7 +108,7 @@ class utils {
     private static function get_page_content(int $cmid): string {
         global $DB;
 
-        list($course, $cm) = get_course_and_cm_from_cmid($cmid, 'page');
+        [$course, $cm] = get_course_and_cm_from_cmid($cmid, 'page');
         $page = $DB->get_record('page', ['id' => $cm->instance], '*', MUST_EXIST);
         return trim(strip_tags($page->content));
     }
@@ -205,8 +205,8 @@ class utils {
      */
     private static function parse_response(string $responsetext): array {
         $responsetext = trim($responsetext);
-        $responsetext = preg_replace('/^```(?:json)?\s*/i', '', $responsetext);
-        $responsetext = preg_replace('/\s*```$/', '', $responsetext);
+        $responsetext = preg_replace('/^\x60\x60\x60(?:json)?\s*/i', '', $responsetext);
+        $responsetext = preg_replace('/\s*\x60\x60\x60$/', '', $responsetext);
 
         $data = json_decode($responsetext, true);
 
@@ -226,7 +226,7 @@ class utils {
         $concepts = [];
         foreach ($data['concepts'] as $concept) {
             if (empty($concept['topic']) || empty($concept['search_query'])) {
-                continue; 
+                continue;
             }
 
             $concepts[] = [
