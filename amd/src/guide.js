@@ -169,7 +169,7 @@ define([
                     // User accepted — record policy status.
                     Ajax.call([{
                         methodname: 'core_ai_set_policy_status',
-                        args: {contextid: M.cfg.contextid, userid: M.cfg.userId}
+                        args: {contextid: M.cfg.contextid}
                     }])[0].then(resolve).catch(reject);
                 },
                 reject
