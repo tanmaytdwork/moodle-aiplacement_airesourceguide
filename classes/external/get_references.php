@@ -56,13 +56,16 @@ class get_references extends external_api {
      * 1. Validate parameters.
      * 2. Verify the course module is a Page activity.
      * 3. Validate context.
-     * 4. Check user capability.
-     * 5. Call the utils class to process.
+     * 4. Check AI policy acceptance.
+     * 5. Check user capability.
+     * 6. Call the utils class to process.
      *
      * @param int $cmid Course module ID.
      * @return array Array containing concepts with reference links.
      */
     public static function execute(int $cmid): array {
+        global $USER;
+
         // Step 1: Validate parameters.
         $params = self::validate_parameters(self::execute_parameters(), [
             'cmid' => $cmid,
@@ -75,10 +78,15 @@ class get_references extends external_api {
         $context = \context_module::instance($cm->id);
         self::validate_context($context);
 
-        // Step 4: Check capability.
+        // Step 4: Check AI policy acceptance.
+        if (!\core_ai\manager::get_user_policy_status($USER->id)) {
+            throw new \moodle_exception('aicallfailed', 'aiplacement_airesourceguide');
+        }
+
+        // Step 5: Check capability.
         require_capability('aiplacement/airesourceguide:viewreferences', $context);
 
-        // Step 5: Get references.
+        // Step 6: Get references.
         $references = utils::get_references($params['cmid']);
 
         return ['concepts' => $references];
